@@ -6,10 +6,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { ForgotPasswordFormData } from "@/lib/types/AuthTypes";
+import { SignInFormData } from "@/lib/types/AuthTypes";
 import Link from "next/link";
+import { useState } from "react";
+import {
+  signInWithEmail,
+  signOutUser,
+} from "../../../supabase/functions/auth/actions.ts";
+import { toast, Toaster } from "sonner";
 
-export function ResetPasswordForm({
+export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -17,14 +23,26 @@ export function ResetPasswordForm({
     register,
     formState: { errors },
     handleSubmit,
-    watch,
-  } = useForm<ForgotPasswordFormData>();
+  } = useForm<SignInFormData>();
+  const [isLoggingIn, setIsLoggingIn] = useState<boolean>(false);
 
-  const onSubmit = (data: ForgotPasswordFormData) =>
-    console.log(JSON.stringify(data));
+  const onSubmit = async (data: SignInFormData) => {
+    setIsLoggingIn(true);
+    const response = await signInWithEmail(data);
+
+    if (!response.success) {
+      toast.error(response.error || "Something went wrong. Please try again.");
+      setIsLoggingIn(false);
+      return;
+    }
+
+    toast.success(response.message);
+    setIsLoggingIn(false);
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
+      <Toaster position={`top-center`} richColors />
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
@@ -54,8 +72,37 @@ export function ResetPasswordForm({
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full">
-                Send Reset Link
+              <div className="grid gap-3">
+                <div className="flex items-center">
+                  <Label htmlFor="password">Password</Label>
+                  <Link
+                    href="/forgot-password"
+                    className="ml-auto text-sm underline-offset-2 hover:underline"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+                <Input
+                  type="password"
+                  required
+                  {...register("password", {
+                    required: "Password is required",
+                    pattern: {
+                      value:
+                        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{};':"\\|,.<>/?~-]).{8,}$/,
+                      message:
+                        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character",
+                    },
+                  })}
+                />
+                {errors.password && (
+                  <p className={`text-sm text-red-500`}>
+                    {String(errors.password.message)}
+                  </p>
+                )}
+              </div>
+              <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                {isLoggingIn ? "Signing In..." : "Sign In"}
               </Button>
               <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                 <span className="bg-card text-muted-foreground relative z-10 px-2">
