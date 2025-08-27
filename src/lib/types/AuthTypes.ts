@@ -22,3 +22,8 @@ export interface SignInRequest {
   email: string;
   password: string;
 }
+
+export interface ResetPasswordRequest {
+  email: string;
+  newPassword: string;
+}
