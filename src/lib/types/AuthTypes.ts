@@ -1,3 +1,5 @@
+import type { User } from "@supabase/supabase-js";
+
 export interface signUpFormData {
   email: string;
   password: string;
@@ -26,4 +28,11 @@ export interface SignInRequest {
 export interface ResetPasswordRequest {
   email: string;
   newPassword: string;
+}
+
+export interface UserStore {
+  user: User | null;
+  loading: boolean;
+  setUser: (user: User | null) => void;
+  fetchUser: () => Promise<void>;
 }
