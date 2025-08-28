@@ -13,7 +13,7 @@ export const supabase = createBrowserClient(
       set(name: string, value: string, options?: { maxAge?: number; path?: string; domain?: string; secure?: boolean; sameSite?: "lax" | "strict" | "none" }) {
         if (typeof document === "undefined") return;
         let cookie = `${name}=${encodeURIComponent(value)}`;
-        const opts = { path: "/", ...options };
+        const opts = { path: "/", sameSite: "lax" as const, ...options };
         if (opts.maxAge) cookie += `; Max-Age=${opts.maxAge}`;
         if (opts.domain) cookie += `; Domain=${opts.domain}`;
         if (opts.path) cookie += `; Path=${opts.path}`;

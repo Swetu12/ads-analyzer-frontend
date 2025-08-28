@@ -1,32 +1,50 @@
-// src/middleware.ts
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// Public routes
-const publicRoutes = ["/login", "/sign-up", "/forgot-password"];
+const authRoutes = [
+  "/login",
+  "/sign-up",
+  "/forgot-password",
+  "/reset-password",
+];
 
 export function middleware(request: NextRequest) {
-  const pathname = request.nextUrl.pathname;
+  const { pathname } = request.nextUrl;
 
-  // Allow public routes
-  const isPublic = publicRoutes.some(
+  const isAuthRoute = authRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
 
-  if (isPublic) return NextResponse.next();
+  const cookies = request.cookies.getAll();
 
-  // Check for Supabase access token cookie
-  const token = request.cookies.get("sb-access-token")?.value;
+  const supabaseAuthCookie = cookies.find((c) =>
+    /^sb-[a-z0-9]+-auth-token\.\d+$/.test(c.name),
+  );
 
-  if (!token) {
+  const supabaseOAuthCookie = cookies.find((c) =>
+    /^sb-[a-z0-9]+-auth-token-code-verifier$/.test(c.name),
+  );
+
+  const hasSession = !!supabaseAuthCookie?.value;
+  const isInOAuthFlow = !!supabaseOAuthCookie?.value;
+
+  if (hasSession && isAuthRoute) {
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  const isExcluded =
+    pathname.startsWith("/api") ||
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/static") ||
+    pathname === "/favicon.ico";
+
+  if (!isExcluded && !isAuthRoute && !hasSession && !isInOAuthFlow) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Token exists, allow access
   return NextResponse.next();
 }
 
-// Apply middleware to all pages except API, _next, static, favicon
 export const config = {
-  matcher: ["/((?!api|_next|static|favicon.ico).*)"],
+  matcher: ["/((?!_next|static|favicon.ico).*)"],
 };
