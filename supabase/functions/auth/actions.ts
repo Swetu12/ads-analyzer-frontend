@@ -52,6 +52,7 @@ export async function signInWithEmail(signInData: SignInRequest) {
       return { success: false, error: "No active session found" };
     }
 
+    document.cookie = `sb-access-token=${data.session.access_token}; path=/;`;
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     return {
@@ -128,8 +129,7 @@ export async function googleSignIn() {
       return { success: false, error: error.message };
     }
 
-    console.log("OAuth Data:", data);
-
+    document.cookie = `sb-access-token=${data.session.access_token}; path=/;`;
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     return {
@@ -152,8 +152,7 @@ export async function githubSignIn() {
       return { success: false, error: error.message };
     }
 
-    console.log("OAuth Data:", data);
-
+    document.cookie = `sb-access-token=${data.session.access_token}; path=/;`;
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     return {

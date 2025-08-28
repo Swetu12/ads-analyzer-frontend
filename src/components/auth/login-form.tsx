@@ -11,8 +11,8 @@ import Link from "next/link";
 import { useState } from "react";
 import {
   githubSignIn,
-  googleSignIn,
   signInWithEmail,
+  googleSignIn,
 } from "../../../supabase/functions/auth/actions.ts";
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/navigation";
