@@ -6,8 +6,13 @@ import {
   Settings2,
   Sparkles,
 } from "lucide-react";
+import { useCampaignStore } from "@/lib/stores/analysis/CampaignStore.ts";
+import { useCampaignFilesStore } from "@/lib/stores/analysis/CampaignFilesStore.ts";
 
 export function getActionBarDataByRoute(pathname: string) {
+  const { setIsCampaignModalOpen } = useCampaignStore();
+  const { setIsOpen } = useCampaignFilesStore();
+
   if (pathname === "/dashboard") {
     return [
       [
@@ -27,10 +32,10 @@ export function getActionBarDataByRoute(pathname: string) {
     return [
       [
         {
-          label: "Campaign Details",
+          label: "Upload File",
           icon: Settings2,
           onClick: () => {
-            console.log("Campaign Details clicked");
+            setIsOpen(true);
           },
         },
       ],
@@ -42,7 +47,7 @@ export function getActionBarDataByRoute(pathname: string) {
           label: "Create Campaign",
           icon: Settings2,
           onClick: () => {
-            console.log("Create Campaign");
+            setIsCampaignModalOpen(true);
           },
         },
       ],

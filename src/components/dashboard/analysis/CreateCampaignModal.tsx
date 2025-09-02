@@ -22,6 +22,7 @@ import {
 import { cn } from "@/lib/utils.ts";
 import { Calendar } from "@/components/ui/calendar.tsx";
 import { useCampaignGlobalStore } from "@/lib/stores/global/CampaignGlobalStore.ts";
+import { toast, Toaster } from "sonner";
 
 export function CreateCampaignModal() {
   const date = useCampaignStore((state) => state.date);
@@ -30,9 +31,14 @@ export function CreateCampaignModal() {
   const setName = useCampaignStore((state) => state.setName);
   const goal = useCampaignStore((state) => state.goal);
   const setGoal = useCampaignStore((state) => state.setGoal);
+  const isCampaignModalOpen = useCampaignStore(
+    (state) => state.isCampaignModalOpen,
+  );
+  const setIsCampaignModalOpen = useCampaignStore(
+    (state) => state.setIsCampaignModalOpen,
+  );
   const { user, loading, fetchUser } = useUserStore();
-  const { campaigns, error, fetchCampaigns, addCampaign } =
-    useCampaignGlobalStore();
+  const { campaigns, fetchCampaigns, addCampaign } = useCampaignGlobalStore();
 
   useEffect(() => {
     fetchUser();
@@ -58,15 +64,89 @@ export function CreateCampaignModal() {
 
     if (error) {
       console.error(error);
-      alert("Error creating campaign");
+      toast.error("Error creating campaign");
     } else {
       addCampaign(data[0]);
-      alert("Campaign created successfully");
+      toast.success("Campaign created successfully");
+      setIsCampaignModalOpen(false);
+      setGoal(0);
+      setName("");
+      setDate({});
     }
   };
 
-  return campaigns && campaigns.length > 0 ? null : (
+  return campaigns && campaigns.length > 0 ? (
+    <Dialog open={isCampaignModalOpen} onOpenChange={setIsCampaignModalOpen}>
+      <Toaster position={"top-right"} richColors />
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle>Create Campaign</DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-4 mt-4">
+          {/* Campaign Name */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Name</label>
+            <Input
+              placeholder="Campaign name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+
+          {/* Campaign Goal */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Goal</label>
+            <Input
+              type="number"
+              placeholder="1000"
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+            />
+          </div>
+
+          {/* Date Range */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Date Range</label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !date && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date?.from && date?.to ? (
+                    <>
+                      {date.from.toDateString()} - {date.to.toDateString()}
+                    </>
+                  ) : (
+                    <span>Pick a date range</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                  mode="range"
+                  selected={date}
+                  onSelect={setDate}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          <Button className="w-full" onClick={handleSubmit}>
+            Create
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  ) : (
     <Dialog>
+      <Toaster position={`top-right`} richColors />
       <p className="text-sm text-muted-foreground mb-6">
         Get started by creating your first campaign
       </p>

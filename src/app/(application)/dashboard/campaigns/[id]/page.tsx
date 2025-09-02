@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Plus } from "lucide-react";
 import { supabase } from "@/supabase-config/client.ts";
 import { toast, Toaster } from "sonner";
+import UploadFileModal from "@/components/dashboard/analysis/UploadFileModal.tsx";
 
 const Page = () => {
   const { id: campaignId } = useParams();
@@ -63,6 +64,16 @@ const Page = () => {
     }
   };
 
+  async function analyzeData() {
+    try {
+      const res = await fetch("/api/analyze", { method: "POST" });
+      const { analysis } = await res.json();
+      console.log("AI Analysis:", JSON.stringify(analysis));
+    } catch (err) {
+      console.error("Error calling analyze API:", err);
+    }
+  }
+
   return (
     <>
       <div className="min-h-full flex items-center justify-center p-4">
@@ -71,7 +82,7 @@ const Page = () => {
           <p className="text-foreground text-base font-medium">Upload a file</p>
 
           <Button
-            onClick={handleButtonClick}
+            onClick={analyzeData}
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground"
           >
@@ -102,6 +113,7 @@ const Page = () => {
             </>
           )}
         </div>
+        <UploadFileModal />
       </div>
     </>
   );

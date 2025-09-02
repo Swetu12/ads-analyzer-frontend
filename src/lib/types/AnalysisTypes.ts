@@ -4,9 +4,11 @@ export interface CampaignStore {
   name: string;
   goal: number;
   date: DateRange;
+  isCampaignModalOpen: boolean;
   setName: (name: string) => void;
   setGoal: (goal: number) => void;
   setDate: (date: DateRange) => void;
+  setIsCampaignModalOpen: (isCampaignModalOpen: boolean) => void;
 }
 
 interface Campaign {
@@ -25,4 +27,13 @@ export interface CampaignGlobalStore {
   error: string | null;
   fetchCampaigns: () => Promise<void>;
   addCampaign: (campaign: Campaign) => void;
+}
+
+export interface CampaignFilesStore {
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
+  selectedFile: File | null;
+  setSelectedFile: (file: File | null) => void;
+  uploading: boolean;
+  setUploading: (uploading: boolean) => void;
 }
