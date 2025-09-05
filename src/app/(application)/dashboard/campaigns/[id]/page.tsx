@@ -1,19 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { Plus } from "lucide-react";
 import { supabase } from "@/supabase-config/client.ts";
 import { toast, Toaster } from "sonner";
 import UploadFileModal from "@/components/dashboard/analysis/UploadFileModal.tsx";
+import { getCampaignFiles } from "../../../../../../supabase/functions/campaigns/action.ts";
+import Link from "next/link";
 
 const Page = () => {
   const { id: campaignId } = useParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [campaignFiles, setCampaignFiles] = useState<any[]>([]);
+  const [loadingFiles, setLoadingFiles] = useState(true);
+
+  useEffect(() => {
+    async function fetchFiles() {
+      try {
+        const files = await getCampaignFiles(campaignId);
+        setCampaignFiles(files);
+      } catch (error) {
+        console.error("Error fetching files:", error);
+        toast.error("Failed to load files");
+      } finally {
+        setLoadingFiles(false);
+      }
+    }
+    if (campaignId) fetchFiles();
+  }, [campaignId]);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -21,9 +39,7 @@ const Page = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
+    if (file) setSelectedFile(file);
   };
 
   const handleUpload = async () => {
@@ -31,10 +47,13 @@ const Page = () => {
 
     setUploading(true);
     try {
-      const user = supabase.auth.getUser();
-      const userId = (await user).data.user?.id;
+      const user = await supabase.auth.getUser();
+      const userId = user.data.user?.id;
 
-      if (!userId) toast.error("User not found");
+      if (!userId) {
+        toast.error("User not found");
+        return;
+      }
 
       const filePath = `${userId}/${campaignId}/${Date.now()}-${selectedFile.name}`;
 
@@ -42,7 +61,10 @@ const Page = () => {
         .from("campaign-files")
         .upload(filePath, selectedFile);
 
-      if (uploadError) toast.error(uploadError);
+      if (uploadError) {
+        toast.error(uploadError.message);
+        return;
+      }
 
       const { error: dbError } = await supabase.from("campaign_files").insert([
         {
@@ -53,9 +75,17 @@ const Page = () => {
         },
       ]);
 
-      if (dbError) toast.error(dbError);
+      if (dbError) {
+        toast.error(dbError.message);
+        return;
+      }
+
       toast.success("File uploaded successfully");
       setSelectedFile(null);
+
+      // Refresh the files after upload
+      const files = await getCampaignFiles(campaignId);
+      setCampaignFiles(files);
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Error uploading file");
@@ -64,58 +94,72 @@ const Page = () => {
     }
   };
 
-  async function analyzeData() {
-    try {
-      const res = await fetch("/api/analyze", { method: "POST" });
-      const { analysis } = await res.json();
-      console.log("AI Analysis:", JSON.stringify(analysis));
-    } catch (err) {
-      console.error("Error calling analyze API:", err);
-    }
-  }
-
   return (
     <>
-      <div className="min-h-full flex items-center justify-center p-4">
-        <Toaster position={`top-right`} richColors />
-        <div className="flex flex-col items-center gap-6">
-          <p className="text-foreground text-base font-medium">Upload a file</p>
+      <div className="min-h-full flex items-start justify-start p-4">
+        <Toaster position="top-right" richColors />
+        {loadingFiles ? (
+          <p>Loading files...</p>
+        ) : campaignFiles.length === 0 ? (
+          <div className="flex flex-col items-center gap-6">
+            <p className="text-foreground text-base font-medium">
+              Upload a file
+            </p>
 
-          <Button
-            onClick={analyzeData}
-            size="lg"
-            className="bg-primary hover:bg-primary/90 text-primary-foreground"
-          >
-            <Plus className="w-8 h-8" />
-          </Button>
+            <Button
+              onClick={handleButtonClick}
+              size="lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <Plus className="w-8 h-8" />
+            </Button>
 
-          <input
-            ref={fileInputRef}
-            type="file"
-            onChange={handleFileChange}
-            className="hidden"
-            accept=".csv,.json"
-          />
+            <input
+              ref={fileInputRef}
+              type="file"
+              onChange={handleFileChange}
+              className="hidden"
+              accept=".csv,.json"
+            />
 
-          {selectedFile && (
-            <>
-              <p className="text-muted-foreground text-sm">
-                Selected: {selectedFile.name}
-              </p>
-              <Button
-                onClick={handleUpload}
-                size="sm"
-                disabled={uploading}
-                className="bg-green-600 hover:bg-green-700"
+            {selectedFile && (
+              <>
+                <p className="text-muted-foreground text-sm">
+                  Selected: {selectedFile.name}
+                </p>
+                <Button
+                  onClick={handleUpload}
+                  size="sm"
+                  disabled={uploading}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {uploading ? "Uploading..." : "Upload"}
+                </Button>
+              </>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            {campaignFiles.map((file) => (
+              <div
+                key={file.id}
+                className="p-4 border rounded-lg shadow-sm flex flex-col gap-2"
               >
-                {uploading ? "Uploading..." : "Upload"}
-              </Button>
-            </>
-          )}
-        </div>
+                <p className="font-medium">{file.file_name}</p>
+                <Link
+                  href={`/dashboard/campaigns/${campaignId}/dashboard`}
+                  className="text-blue-600 hover:underline"
+                >
+                  View File
+                </Link>
+              </div>
+            ))}
+          </div>
+        )}
         <UploadFileModal />
       </div>
     </>
   );
 };
+
 export default Page;
