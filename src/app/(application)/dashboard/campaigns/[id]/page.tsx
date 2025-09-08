@@ -7,7 +7,7 @@ import { Plus } from "lucide-react";
 import { supabase } from "@/supabase-config/client.ts";
 import { toast, Toaster } from "sonner";
 import UploadFileModal from "@/components/dashboard/analysis/UploadFileModal.tsx";
-import { getCampaignFiles } from "../../../../../../supabase/functions/campaigns/action.ts";
+import { getCampaignFiles } from "../../../../../../supabase/functions/campaigns/action.tsx";
 import Link from "next/link";
 
 const Page = () => {
