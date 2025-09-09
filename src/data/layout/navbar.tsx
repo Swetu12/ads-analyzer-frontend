@@ -87,7 +87,12 @@ export function useNavLinks() {
       { name: "Evil Corp.", logo: Command, plan: "Free" },
     ],
     navSecondary: [
-      { title: "Settings", url: "/settings", icon: Settings2 },
+      {
+        title: "Settings",
+        url: "/settings",
+        icon: Settings2,
+        isActive: pathname === "/settings",
+      },
       {
         title: "Log Out",
         url: "",

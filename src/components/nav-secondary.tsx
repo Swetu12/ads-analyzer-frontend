@@ -30,7 +30,7 @@ export function NavSecondary({
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton
                 asChild
-                className={`sidebar-button-color ${item.title === "Log Out" ? "bg-red-600" : ""}`}
+                className={`sidebar-button-color ${item.isActive && "sidebar-button-color-active"} ${item.title === "Log Out" ? "bg-red-600" : ""}`}
                 onClick={item.onClick}
               >
                 <Link href={item.url}>

@@ -15,6 +15,8 @@ import { useNavLinks } from "@/data/layout/navbar.tsx";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const navLinks = useNavLinks();
+  const pathname =
+    typeof window !== "undefined" ? window.location.pathname : "";
 
   return (
     <Sidebar className="border-r-2 border-gray-800" {...props}>
@@ -24,7 +26,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <span className="font-bold text-2xl">AnalytiX</span>
         </div>
 
-        <ActionSearchBar />
+        <div className={`${pathname === "/settings" ? "hidden" : "block"}`}>
+          <ActionSearchBar />
+        </div>
         <NavMain items={navLinks.navMain} />
       </SidebarHeader>
       <SidebarContent className={`sidebar-background`}>
