@@ -17,6 +17,7 @@ import {
 import { toast, Toaster } from "sonner";
 import { useRouter } from "next/navigation";
 import { GithubIcon } from "lucide-react";
+import Image from "next/image";
 
 export function LoginForm({
   className,
@@ -47,21 +48,24 @@ export function LoginForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Toaster position={`top-center`} richColors />
-      <Card className="overflow-hidden p-0">
+      <Toaster position="top-center" richColors />
+      <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Welcome Back</h1>
-                <p className="text-muted-foreground text-balance">
-                  Please sign in to your account
-                </p>
+                <h1 className="text-2xl font-bold text-white">Welcome Back</h1>
+                <p className="text-gray-400">Please sign in to your account</p>
               </div>
+
+              {/* Email */}
               <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-300">
+                  Email
+                </Label>
                 <Input
                   type="email"
+                  className="bg-[#1B2028] border-[#2C82A8]/30 text-white placeholder:text-gray-500 focus:border-[#2C82A8] focus:ring-[#2C82A8]"
                   placeholder="m@example.com"
                   {...register("email", {
                     required: "Email is required",
@@ -72,23 +76,28 @@ export function LoginForm({
                   })}
                 />
                 {errors.email && (
-                  <p className={`text-sm text-red-500`}>
+                  <p className="text-sm text-red-400">
                     {String(errors.email.message)}
                   </p>
                 )}
               </div>
+
+              {/* Password */}
               <div className="grid gap-3">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password" className="text-gray-300">
+                    Password
+                  </Label>
                   <Link
                     href="/forgot-password"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
+                    className="ml-auto text-sm text-[#2C82A8] hover:underline"
                   >
                     Forgot your password?
                   </Link>
                 </div>
                 <Input
                   type="password"
+                  className="bg-[#1B2028] border-[#2C82A8]/30 text-white placeholder:text-gray-500 focus:border-[#2C82A8] focus:ring-[#2C82A8]"
                   required
                   {...register("password", {
                     required: "Password is required",
@@ -101,24 +110,35 @@ export function LoginForm({
                   })}
                 />
                 {errors.password && (
-                  <p className={`text-sm text-red-500`}>
+                  <p className="text-sm text-red-400">
                     {String(errors.password.message)}
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full" disabled={isLoggingIn}>
+
+              {/* Submit */}
+              <Button
+                type="submit"
+                className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white"
+                disabled={isLoggingIn}
+              >
                 {isLoggingIn ? "Signing In..." : "Sign In"}
               </Button>
-              <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-                <span className="bg-card text-muted-foreground relative z-10 px-2">
+
+              {/* Divider */}
+              <div className="relative text-center text-sm text-gray-400">
+                <span className="bg-[#1B2028]/80 px-2 relative z-10">
                   Or continue with
                 </span>
+                <div className="absolute inset-0 top-1/2 border-t border-[#2C82A8]/30 z-0" />
               </div>
+
+              {/* Social Buttons */}
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full hover:cursor-pointer"
+                  className="w-full border-[#2C82A8]/40 bg-[#1B2028] text-white hover:bg-[#2C82A8]/20"
                   onClick={githubSignIn}
                 >
                   <GithubIcon />
@@ -127,7 +147,7 @@ export function LoginForm({
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full hover:cursor-pointer"
+                  className="w-full border-[#2C82A8]/40 bg-[#1B2028] text-white hover:bg-[#2C82A8]/20"
                   onClick={googleSignIn}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -139,27 +159,44 @@ export function LoginForm({
                   <span className="sr-only">Login with Google</span>
                 </Button>
               </div>
-              <div className="text-center text-sm">
-                Already have an account?{" "}
-                <Link href="/sign-up" className="underline underline-offset-4">
+
+              {/* Footer Link */}
+              <div className="text-center text-sm text-gray-400">
+                Don’t have an account?{" "}
+                <Link
+                  href="/sign-up"
+                  className="text-[#2C82A8] hover:underline"
+                >
                   Sign Up
                 </Link>
               </div>
             </div>
           </form>
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+
+          {/* Right Image Section */}
+          <div className="border-l relative hidden md:block">
+            <Image
+              src={`/logo.svg`}
+              alt={`logo`}
+              width={50}
+              height={50}
+              className={`absolute inset-0 h-full w-full p-10 opacity-30`}
             />
           </div>
         </CardContent>
       </Card>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+
+      {/* Terms */}
+      <div className="text-gray-500 text-center text-xs">
         By clicking continue, you agree to our{" "}
-        <Link href="#">Terms of Service</Link> and{" "}
-        <Link href="#">Privacy Policy</Link>.
+        <Link href="#" className="text-[#2C82A8] hover:underline">
+          Terms of Service
+        </Link>{" "}
+        and{" "}
+        <Link href="#" className="text-[#2C82A8] hover:underline">
+          Privacy Policy
+        </Link>
+        .
       </div>
     </div>
   );

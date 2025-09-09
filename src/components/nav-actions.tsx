@@ -46,7 +46,7 @@ export function NavActions() {
           className="w-56 overflow-hidden rounded-lg p-0"
           align="end"
         >
-          <Sidebar collapsible="none" className="bg-transparent">
+          <Sidebar collapsible="none" className="sidebar-background">
             <SidebarContent>
               {data.map((group, index) => (
                 <SidebarGroup key={index} className="border-b last:border-none">
@@ -54,7 +54,10 @@ export function NavActions() {
                     <SidebarMenu>
                       {group.map((item, index) => (
                         <SidebarMenuItem key={index}>
-                          <SidebarMenuButton onClick={item.onClick}>
+                          <SidebarMenuButton
+                            onClick={item.onClick}
+                            className={`sidebar-button-color cursor-pointer`}
+                          >
                             <item.icon /> <span>{item.label}</span>
                           </SidebarMenuButton>
                         </SidebarMenuItem>

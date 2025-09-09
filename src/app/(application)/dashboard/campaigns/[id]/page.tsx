@@ -2,21 +2,23 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "next/navigation";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { supabase } from "@/supabase-config/client.ts";
+import { supabase } from "@/supabase-config/client";
 import { toast, Toaster } from "sonner";
-import UploadFileModal from "@/components/dashboard/analysis/UploadFileModal.tsx";
-import { getCampaignFiles } from "../../../../../../supabase/functions/campaigns/action.tsx";
+import UploadFileModal from "@/components/dashboard/analysis/UploadFileModal";
+import { getCampaignFiles } from "../../../../../../supabase/functions/campaigns/action";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
+import { useCampaignFilesStore } from "@/lib/stores/analysis/CampaignFilesStore.ts";
 
 const Page = () => {
   const { id: campaignId } = useParams();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [campaignFiles, setCampaignFiles] = useState<any[]>([]);
-  const [loadingFiles, setLoadingFiles] = useState(true);
+  const { campaignFiles, setCampaignFiles, loadingFiles, setLoadingFiles } =
+    useCampaignFilesStore();
 
   useEffect(() => {
     async function fetchFiles() {
@@ -80,12 +82,14 @@ const Page = () => {
         return;
       }
 
-      toast.success("File uploaded successfully");
-      setSelectedFile(null);
+      const toastId = toast.loading("Running analysis...");
 
-      // Refresh the files after upload
-      const files = await getCampaignFiles(campaignId);
-      setCampaignFiles(files);
+      setTimeout(async () => {
+        toast.success("Analysis Complete!", { id: toastId });
+        const files = await getCampaignFiles(campaignId);
+        setCampaignFiles(files);
+      }, 5000);
+      setSelectedFile(null);
     } catch (error) {
       console.error("Error uploading file:", error);
       toast.error("Error uploading file");
@@ -95,70 +99,93 @@ const Page = () => {
   };
 
   return (
-    <>
-      <div className="min-h-full flex items-start justify-start p-4">
-        <Toaster position="top-right" richColors />
-        {loadingFiles ? (
-          <p>Loading files...</p>
-        ) : campaignFiles.length === 0 ? (
-          <div className="flex flex-col items-center gap-6">
-            <p className="text-foreground text-base font-medium">
-              Upload a file
-            </p>
+    <div className="space-y-6 p-6 min-h-full">
+      <Toaster position="top-right" richColors />
 
-            <Button
-              onClick={handleButtonClick}
-              size="lg"
-              className="bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              <Plus className="w-8 h-8" />
-            </Button>
-
-            <input
-              ref={fileInputRef}
-              type="file"
-              onChange={handleFileChange}
-              className="hidden"
-              accept=".csv,.json"
-            />
-
-            {selectedFile && (
-              <>
-                <p className="text-muted-foreground text-sm">
-                  Selected: {selectedFile.name}
-                </p>
-                <Button
-                  onClick={handleUpload}
-                  size="sm"
-                  disabled={uploading}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  {uploading ? "Uploading..." : "Upload"}
-                </Button>
-              </>
-            )}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
-            {campaignFiles.map((file) => (
-              <div
-                key={file.id}
-                className="p-4 border rounded-lg shadow-sm flex flex-col gap-2"
+      {loadingFiles ? (
+        <p className="text-slate-400">Loading files...</p>
+      ) : campaignFiles.length === 0 ? (
+        <div className="flex flex-col items-center justify-center gap-6 py-16">
+          <p className="text-slate-300 text-lg font-medium">
+            No files uploaded yet
+          </p>
+          <Button
+            onClick={handleButtonClick}
+            size="lg"
+            className="bg-[#2C82A8] hover:bg-[#3893BB] cursor-pointer text-primary-foreground"
+          >
+            <Plus className="w-6 h-6 mr-2" />
+            Upload File
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileChange}
+            className="hidden"
+            accept=".csv,.json"
+          />
+          {selectedFile && (
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-sm text-slate-400">
+                Selected: {selectedFile.name}
+              </p>
+              <Button
+                onClick={handleUpload}
+                size="sm"
+                disabled={uploading}
+                className="bg-[#2C82A8] hover:bg-[#3893BB] cursor-pointer"
               >
-                <p className="font-medium">{file.file_name}</p>
-                <Link
-                  href={`/dashboard/campaigns/${campaignId}/dashboard`}
-                  className="text-blue-600 hover:underline"
-                >
-                  View File
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
-        <UploadFileModal />
-      </div>
-    </>
+                {uploading ? "Uploading..." : "Upload"}
+              </Button>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+          {campaignFiles.map((file) => (
+            <Link
+              href={`/dashboard/campaigns/${campaignId}/dashboard`}
+              key={file.id}
+            >
+              <Card className="p-6 h-40 analysis-card-background-color border-slate-700/50 hover:bg-slate-800/95 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl hover:shadow-blue-500/10">
+                <div className="flex flex-col h-full justify-between">
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <h3 className="font-bold text-lg text-slate-100 truncate group-hover:text-blue-300 transition-colors leading-tight">
+                        {file.file_name}
+                      </h3>
+                      <div className="w-3 h-3 bg-blue-500/60 rounded-full group-hover:bg-blue-400 transition-colors shadow-sm"></div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center text-xs pt-2">
+                    <span className="text-slate-400">Click to analyze</span>
+                    <div className="flex items-center gap-1 text-blue-400 group-hover:text-blue-300 transition-colors">
+                      <span>View File</span>
+                      <svg
+                        className="w-3 h-3 transform group-hover:translate-x-0.5 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      <UploadFileModal />
+    </div>
   );
 };
 

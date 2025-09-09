@@ -13,7 +13,7 @@ export function AudienceFeedbackSection({
   const getSentimentIcon = (sentiment: string) => {
     switch (sentiment) {
       case "positive":
-        return <ThumbsUp className="w-4 h-4 text-green-400" />;
+        return <ThumbsUp className="w-4 h-4 text-[#2C82A8]" />;
       case "negative":
         return <ThumbsDown className="w-4 h-4 text-red-400" />;
       default:
@@ -24,7 +24,7 @@ export function AudienceFeedbackSection({
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment) {
       case "positive":
-        return "border-green-500/20 bg-green-500/10";
+        return "border-[#2C82A8]/40 bg-[#2C82A820]";
       case "negative":
         return "border-red-500/20 bg-red-500/10";
       default:
@@ -39,11 +39,12 @@ export function AudienceFeedbackSection({
     ) / campaign.audience_feedback.length;
 
   return (
-    <Card className="bg-[#1a1b1e] border-gray-800">
+    <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
       <div className="p-6">
+        {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
-            <Users className="w-5 h-5 text-purple-400" />
+            <Users className="w-5 h-5 text-[#3893BB]" />
             <h3 className="text-lg font-semibold text-white">
               Audience Feedback
             </h3>
@@ -57,6 +58,7 @@ export function AudienceFeedbackSection({
           </div>
         </div>
 
+        {/* Feedback Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
           {campaign.audience_feedback.map((feedback, index) => (
             <div

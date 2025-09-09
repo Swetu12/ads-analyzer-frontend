@@ -36,3 +36,7 @@ export interface UserStore {
   setUser: (user: User | null) => void;
   fetchUser: () => Promise<void>;
 }
+
+export interface UpdateEmailTypes {
+  newEmail: string;
+}

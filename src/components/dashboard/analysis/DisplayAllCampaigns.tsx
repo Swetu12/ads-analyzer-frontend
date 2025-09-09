@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { useCampaignGlobalStore } from "@/lib/stores/global/CampaignGlobalStore.ts";
+import { useCampaignGlobalStore } from "@/lib/stores/global/CampaignGlobalStore";
 import Link from "next/link";
 
 export default function DisplayAllCampaigns() {
@@ -7,21 +7,32 @@ export default function DisplayAllCampaigns() {
 
   return (
     <div className="space-y-6 p-6">
-      <div className="space-y-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
         {campaigns.map((campaign) => (
           <Link href={`/dashboard/campaigns/${campaign.id}`} key={campaign.id}>
-            <Card className="p-4 bg-card/50 border-border/50 hover:bg-card hover:border-border transition-all duration-200 cursor-pointer group">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 text-left min-w-0">
-                  <h3 className="font-semibold text-card-foreground text-pretty truncate group-hover:text-foreground transition-colors">
-                    {campaign.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground text-balance leading-relaxed mt-1 line-clamp-2">
-                    Goal: {campaign.goal}
-                  </p>
+            <Card className="p-6 h-48 analysis-card-background-color border-slate-700/50 hover:bg-slate-800/95 hover:border-blue-500/50 transition-all duration-300 cursor-pointer group shadow-lg hover:shadow-xl hover:shadow-blue-500/10">
+              <div className="flex flex-col h-full justify-between">
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="font-bold text-lg text-slate-100 text-pretty group-hover:text-blue-300 transition-colors leading-tight">
+                      {campaign.name}
+                    </h3>
+                    <div className="flex-shrink-0">
+                      <div className="w-3 h-3 bg-blue-500/60 rounded-full group-hover:bg-blue-400 transition-colors shadow-sm"></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-300 text-balance leading-relaxed line-clamp-2">
+                      <span className="text-blue-400 font-medium">Goal:</span>{" "}
+                      {campaign.goal}
+                    </p>
+                  </div>
                 </div>
-                <div className="flex-shrink-0 text-right">
-                  <p className="text-xs text-muted-foreground font-medium">
+
+                <div className="space-y-3 pt-2">
+                  {/* Date range with enhanced styling */}
+                  <div className="text-xs text-slate-400 font-medium bg-slate-800/50 rounded-md px-3 py-2 border border-slate-700/30">
                     {campaign.start_date && campaign.end_date
                       ? `${new Date(campaign.start_date).toLocaleDateString(
                           "en-US",
@@ -39,9 +50,27 @@ export default function DisplayAllCampaigns() {
                           },
                         )}`
                       : "No date set"}
-                  </p>
+                  </div>
 
-                  <div className="w-2 h-2 bg-accent/60 rounded-full mt-2 ml-auto group-hover:bg-accent transition-colors"></div>
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="text-slate-400">Click to analyze</span>
+                    <div className="flex items-center gap-1 text-blue-400 group-hover:text-blue-300 transition-colors">
+                      <span>View Details</span>
+                      <svg
+                        className="w-3 h-3 transform group-hover:translate-x-0.5 transition-transform"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>

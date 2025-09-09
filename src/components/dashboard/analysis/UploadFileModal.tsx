@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +14,7 @@ import { Plus, Upload } from "lucide-react";
 import { supabase } from "@/supabase-config/client";
 import { toast, Toaster } from "sonner";
 import { useCampaignFilesStore } from "@/lib/stores/analysis/CampaignFilesStore.ts";
+import { getCampaignFiles } from "../../../../supabase/functions/campaigns/action.tsx";
 
 export default function UploadFileModal() {
   const { id: campaignId } = useParams();
@@ -24,6 +25,8 @@ export default function UploadFileModal() {
   const setSelectedFile = useCampaignFilesStore(
     (state) => state.setSelectedFile,
   );
+  const { loadingFiles, setLoadingFiles, campaignFiles, setCampaignFiles } =
+    useCampaignFilesStore();
   const uploading = useCampaignFilesStore((state) => state.uploading);
   const setUploading = useCampaignFilesStore((state) => state.setUploading);
 
@@ -31,6 +34,22 @@ export default function UploadFileModal() {
     const file = event.target.files?.[0];
     if (file) setSelectedFile(file);
   };
+
+  useEffect(() => {
+    async function fetchFiles() {
+      try {
+        const files = await getCampaignFiles(campaignId);
+        setCampaignFiles(files);
+      } catch (error) {
+        console.error("Error fetching files: ", error);
+        toast.error("Failed to load files");
+      } finally {
+        setLoadingFiles(false);
+      }
+    }
+
+    if (campaignId) fetchFiles();
+  }, [campaignId]);
 
   const handleUpload = async () => {
     if (!selectedFile) return;
@@ -70,7 +89,12 @@ export default function UploadFileModal() {
         return;
       }
 
-      toast.success("File uploaded successfully");
+      const toastId = toast.loading("Running analysis...");
+      setTimeout(async () => {
+        toast.success("Analysis Complete!", { id: toastId });
+        const files = await getCampaignFiles(campaignId);
+        setCampaignFiles(files);
+      }, 5000);
       setSelectedFile(null);
       setIsOpen(false);
     } catch (error) {
@@ -109,7 +133,7 @@ export default function UploadFileModal() {
             <Button
               onClick={handleUpload}
               disabled={uploading || !selectedFile}
-              className="bg-green-600 hover:bg-green-700"
+              className="bg-[#2C82A8] hover:bg-[#3893BB] cursor-pointer"
             >
               {uploading ? (
                 "Uploading..."

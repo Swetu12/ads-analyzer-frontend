@@ -13,7 +13,7 @@ export function PerformanceBreakdownSection({
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "up":
-        return <TrendingUp className="w-4 h-4 text-green-400" />;
+        return <TrendingUp className="w-4 h-4 text-[#2C82A8]" />;
       case "down":
         return <TrendingDown className="w-4 h-4 text-red-400" />;
       default:
@@ -24,7 +24,7 @@ export function PerformanceBreakdownSection({
   const getTrendColor = (trend: string) => {
     switch (trend) {
       case "up":
-        return "text-green-400";
+        return "text-[#2C82A8]";
       case "down":
         return "text-red-400";
       default:
@@ -33,10 +33,10 @@ export function PerformanceBreakdownSection({
   };
 
   return (
-    <Card className="bg-[#1a1b1e] border-gray-800">
+    <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
       <div className="p-6">
         <div className="flex items-center space-x-2 mb-6">
-          <BarChart3 className="w-5 h-5 text-indigo-400" />
+          <BarChart3 className="w-5 h-5 text-[#3893BB]" />
           <h3 className="text-lg font-semibold text-white">
             Performance Breakdown
           </h3>
@@ -44,7 +44,10 @@ export function PerformanceBreakdownSection({
 
         <div className="space-y-4">
           {campaign.performance_breakdown.map((metric, index) => (
-            <div key={index} className="bg-gray-800/50 rounded-lg p-4">
+            <div
+              key={index}
+              className="bg-[#1B2028] border border-[#2C82A8]/30 rounded-lg p-4"
+            >
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-medium text-white">{metric.metric}</h4>
                 <div className="flex items-center space-x-1">
@@ -83,11 +86,11 @@ export function PerformanceBreakdownSection({
 
               {/* Progress bar */}
               <div className="mt-3">
-                <div className="w-full bg-gray-700 rounded-full h-2">
+                <div className="w-full bg-[#2C82A820] rounded-full h-2">
                   <div
                     className={`h-2 rounded-full ${
                       metric.trend === "up"
-                        ? "bg-green-400"
+                        ? "bg-[#2C82A8]"
                         : metric.trend === "down"
                           ? "bg-red-400"
                           : "bg-gray-400"

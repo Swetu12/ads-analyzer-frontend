@@ -1,20 +1,25 @@
+"use client";
+
 import {
   AudioWaveform,
-  Blocks,
   Calendar,
+  ChartPie,
   Command,
-  FileText,
+  Download,
+  FileUp,
+  Gauge,
   Home,
   Inbox,
-  MessageCircleQuestion,
-  Search,
+  LogOutIcon,
+  Pencil,
   Settings2,
   Sparkles,
-  Trash2,
 } from "lucide-react";
 import { useCampaignStore } from "@/lib/stores/analysis/CampaignStore.ts";
 import { useCampaignFilesStore } from "@/lib/stores/analysis/CampaignFilesStore.ts";
 import { handleExportPDF } from "../../../supabase/functions/campaigns/action.tsx";
+import { signOutUser } from "../../../supabase/functions/auth/actions.ts";
+import { usePathname } from "next/navigation";
 
 export function getActionBarDataByRoute(pathname: string) {
   const { setIsCampaignModalOpen } = useCampaignStore();
@@ -37,7 +42,7 @@ export function getActionBarDataByRoute(pathname: string) {
       [
         {
           label: "Export Analysis",
-          icon: Home,
+          icon: Download,
           onClick: handleExportPDF,
         },
       ],
@@ -50,7 +55,7 @@ export function getActionBarDataByRoute(pathname: string) {
       [
         {
           label: "Upload File",
-          icon: Settings2,
+          icon: FileUp,
           onClick: () => {
             setIsOpen(true);
           },
@@ -62,7 +67,7 @@ export function getActionBarDataByRoute(pathname: string) {
       [
         {
           label: "Create Campaign",
-          icon: Settings2,
+          icon: Pencil,
           onClick: () => {
             setIsCampaignModalOpen(true);
           },
@@ -72,68 +77,43 @@ export function getActionBarDataByRoute(pathname: string) {
   }
 }
 
-export const navLinks = {
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: Command,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings2,
-    },
-    {
-      title: "Templates",
-      url: "#",
-      icon: Blocks,
-    },
-    {
-      title: "Trash",
-      url: "#",
-      icon: Trash2,
-    },
-    {
-      title: "Help",
-      url: "#",
-      icon: MessageCircleQuestion,
-    },
-  ],
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: Sparkles,
-    },
-    {
-      title: "Analysis",
-      url: "/dashboard/analysis",
-      icon: Home,
-      isActive: true,
-    },
-    {
-      title: "Inbox",
-      url: "#",
-      icon: Inbox,
-      badge: "10",
-    },
-  ],
-};
+export function useNavLinks() {
+  const pathname = usePathname();
+
+  return {
+    teams: [
+      { name: "Acme Inc", logo: Command, plan: "Enterprise" },
+      { name: "Acme Corp.", logo: AudioWaveform, plan: "Startup" },
+      { name: "Evil Corp.", logo: Command, plan: "Free" },
+    ],
+    navSecondary: [
+      { title: "Settings", url: "/settings", icon: Settings2 },
+      {
+        title: "Log Out",
+        url: "",
+        icon: LogOutIcon,
+        onClick: async (e: React.MouseEvent) => {
+          e.preventDefault();
+          await signOutUser();
+          window.location.reload();
+        },
+      },
+    ],
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "/dashboard",
+        icon: Gauge,
+        isActive: pathname === "/dashboard",
+      },
+      {
+        title: "Analysis",
+        url: "/dashboard/analysis",
+        icon: ChartPie,
+        isActive:
+          pathname.startsWith("/dashboard/analysis") ||
+          pathname.startsWith("/dashboard/campaigns"),
+      },
+    ],
+  };
+}

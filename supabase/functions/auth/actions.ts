@@ -8,7 +8,7 @@ import {
 export async function signUpNewUser(signUpData: SignUpRequest) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/auth-signup`, // your deployed function URL
+      `${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/auth-signup`,
       {
         method: "POST",
         headers: {
@@ -52,7 +52,6 @@ export async function signInWithEmail(signInData: SignInRequest) {
       return { success: false, error: "No active session found" };
     }
 
-    // Cookies are managed by the Supabase client configured to use cookies
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     return {
@@ -63,12 +62,19 @@ export async function signInWithEmail(signInData: SignInRequest) {
 }
 
 export async function signOutUser() {
-  const { error } = await supabase.auth.signOut();
+  try {
+    const { error } = await supabase.auth.signOut();
 
-  if (error) {
-    return { success: false, error: error.message };
-  } else {
-    return console.log("Sign Out successfully!");
+    if (error) {
+      return { success: false, error: error.message };
+    } else {
+      return console.log("Sign Out successfully!");
+    }
+  } catch (error) {
+    return {
+      success: false,
+      error: "Unexpected error occurred. Please try again",
+    };
   }
 }
 
@@ -129,7 +135,6 @@ export async function googleSignIn() {
       return { success: false, error: error.message };
     }
 
-    // Cookies are managed by the Supabase client configured to use cookies
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     return {
@@ -152,12 +157,32 @@ export async function githubSignIn() {
       return { success: false, error: error.message };
     }
 
-    // Cookies are managed by the Supabase client configured to use cookies
     return { success: true, message: "Signed in successfully" };
   } catch (error) {
     return {
       success: false,
       error: "Unexpected error occurred. Please try again",
+    };
+  }
+}
+
+export async function updateUserEmail(email: string) {
+  try {
+    const { data, error } = await supabase.auth.updateUser({ email });
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message || "Something went wrong. Please try again.",
+      };
+    }
+
+    console.log("Email update request sent. Awaiting verification.");
+    return { success: true, message: "Verification email sent." };
+  } catch (error) {
+    return {
+      success: false,
+      error: "Unexpected error occurred. Please try again.",
     };
   }
 }

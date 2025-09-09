@@ -26,7 +26,7 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
     ...campaign.lowest_performing_ads,
   ];
 
-  const chartData = allAds.map((ad, index) => ({
+  const chartData = allAds.map((ad) => ({
     name: ad.title.split(" ").slice(0, 2).join(" "),
     ctr: ad.ctr * 100,
     conversion: ad.conversion_rate * 100,
@@ -43,10 +43,11 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-[#1a1b1e] border-gray-800">
+      {/* Ad Performance Metrics */}
+      <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
         <div className="p-6">
           <div className="flex items-center space-x-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-green-400" />
+            <TrendingUp className="w-5 h-5 text-[#3893BB]" />
             <h3 className="text-lg font-semibold text-white">
               Ad Performance Metrics
             </h3>
@@ -55,7 +56,7 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#2C82A850" />
                 <XAxis
                   dataKey="name"
                   stroke="#9CA3AF"
@@ -70,8 +71,8 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
                 />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1a1b1e",
-                    border: "1px solid #374151",
+                    backgroundColor: "#1B2028",
+                    border: "1px solid #2C82A8",
                     borderRadius: "8px",
                     color: "#fff",
                   }}
@@ -89,15 +90,15 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
                 <Area
                   type="monotone"
                   dataKey="ctr"
-                  stroke="#10B981"
-                  fill="#10B98120"
+                  stroke="#2C82A8"
+                  fill="#2C82A820"
                   strokeWidth={2}
                 />
                 <Area
                   type="monotone"
                   dataKey="conversion"
-                  stroke="#3B82F6"
-                  fill="#3B82F620"
+                  stroke="#3893BB"
+                  fill="#3893BB20"
                   strokeWidth={2}
                 />
               </AreaChart>
@@ -106,10 +107,11 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
         </div>
       </Card>
 
-      <Card className="bg-[#1a1b1e] border-gray-800 h-[335px]">
+      {/* Performance Comparison */}
+      <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg h-[335px]">
         <div className="p-6">
           <div className="flex items-center space-x-2 mb-4">
-            <BarChart3 className="w-5 h-5 text-blue-400" />
+            <BarChart3 className="w-5 h-5 text-[#2C82A8]" />
             <h3 className="text-lg font-semibold text-white">
               Performance Comparison
             </h3>
@@ -118,7 +120,7 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#2C82A850" />
                 <XAxis
                   dataKey="metric"
                   stroke="#9CA3AF"
@@ -128,8 +130,8 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
                 <YAxis stroke="#9CA3AF" fontSize={12} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#1a1b1e",
-                    border: "1px solid #374151",
+                    backgroundColor: "#1B2028",
+                    border: "1px solid #2C82A8",
                     borderRadius: "8px",
                     color: "#fff",
                   }}
@@ -144,8 +146,12 @@ export function PerformanceCharts({ campaign }: PerformanceChartsProps) {
                     return label;
                   }}
                 />
-                <Bar dataKey="previous" fill="#6B7280" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="current" fill="#10B981" radius={[4, 4, 0, 0]} />
+                <Bar
+                  dataKey="previous"
+                  fill="#2C82A870"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar dataKey="current" fill="#3893BB" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>

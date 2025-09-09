@@ -75,19 +75,24 @@ export function CreateCampaignModal() {
     }
   };
 
-  return campaigns && campaigns.length > 0 ? (
+  if (campaigns === null) return <div>Loading...</div>;
+
+  return campaigns.length > 0 ? (
     <Dialog open={isCampaignModalOpen} onOpenChange={setIsCampaignModalOpen}>
       <Toaster position={"top-right"} richColors />
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
         <DialogHeader>
-          <DialogTitle>Create Campaign</DialogTitle>
+          <DialogTitle className="text-white">Create Campaign</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
           {/* Campaign Name */}
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Name
+            </label>
             <Input
+              className="bg-[#2C82A820] border-[#2C82A8]/40 text-white placeholder-gray-400"
               placeholder="Campaign name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -96,8 +101,11 @@ export function CreateCampaignModal() {
 
           {/* Campaign Goal */}
           <div>
-            <label className="block text-sm font-medium mb-1">Goal</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Goal
+            </label>
             <Input
+              className="bg-[#2C82A820] border-[#2C82A8]/40 text-white placeholder-gray-400"
               type="number"
               placeholder="1000"
               value={goal}
@@ -107,14 +115,16 @@ export function CreateCampaignModal() {
 
           {/* Date Range */}
           <div>
-            <label className="block text-sm font-medium mb-1">Date Range</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Date Range
+            </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground",
+                    "w-full justify-start text-left font-normal text-white",
+                    !date && "text-gray-400 border-[#2C82A8]/40",
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -133,12 +143,16 @@ export function CreateCampaignModal() {
                   selected={date}
                   onSelect={setDate}
                   initialFocus
+                  className="bg-[#1B2028] text-white border border-[#2C82A8]/40"
                 />
               </PopoverContent>
             </Popover>
           </div>
 
-          <Button className="w-full" onClick={handleSubmit}>
+          <Button
+            className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white font-medium"
+            onClick={handleSubmit}
+          >
             Create
           </Button>
         </div>
@@ -147,27 +161,30 @@ export function CreateCampaignModal() {
   ) : (
     <Dialog>
       <Toaster position={`top-right`} richColors />
-      <p className="text-sm text-muted-foreground mb-6">
+      <p className="text-sm text-gray-400 mb-6">
         Get started by creating your first campaign
       </p>
       <DialogTrigger asChild>
         <Button
           size="lg"
-          className="bg-primary hover:cursor-pointer hover:bg-primary/90 text-primary-foreground font-medium px-8 py-3"
+          className="bg-[#2C82A8] hover:bg-[#3893BB] text-white font-medium px-8 py-3 cursor-pointer"
         >
           <PlusIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
         <DialogHeader>
-          <DialogTitle>Create Campaign</DialogTitle>
+          <DialogTitle className="text-white">Create Campaign</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
           {/* Campaign Name */}
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Name
+            </label>
             <Input
+              className="bg-[#2C82A820] border-[#2C82A8]/40 text-white placeholder-gray-400"
               placeholder="Campaign name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -176,8 +193,11 @@ export function CreateCampaignModal() {
 
           {/* Campaign Goal */}
           <div>
-            <label className="block text-sm font-medium mb-1">Goal</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Goal
+            </label>
             <Input
+              className="bg-[#2C82A820] border-[#2C82A8]/40 text-white placeholder-gray-400"
               type="number"
               placeholder="1000"
               value={goal}
@@ -187,14 +207,16 @@ export function CreateCampaignModal() {
 
           {/* Date Range */}
           <div>
-            <label className="block text-sm font-medium mb-1">Date Range</label>
+            <label className="block text-sm font-medium mb-1 text-gray-300">
+              Date Range
+            </label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className={cn(
-                    "w-full justify-start text-left font-normal",
-                    !date && "text-muted-foreground",
+                    "w-full justify-start text-left font-normal text-white",
+                    !date && "text-gray-400 border-[#2C82A8]/40",
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
@@ -213,12 +235,16 @@ export function CreateCampaignModal() {
                   selected={date}
                   onSelect={setDate}
                   initialFocus
+                  className="bg-[#1B2028] text-white border border-[#2C82A8]/40"
                 />
               </PopoverContent>
             </Popover>
           </div>
 
-          <Button className="w-full" onClick={handleSubmit}>
+          <Button
+            className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white font-medium cursor-pointer"
+            onClick={handleSubmit}
+          >
             Create
           </Button>
         </div>

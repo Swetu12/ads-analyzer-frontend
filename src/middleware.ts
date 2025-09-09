@@ -6,6 +6,7 @@ const authRoutes = [
   "/sign-up",
   "/forgot-password",
   "/reset-password",
+  "/logo.svg",
 ];
 
 export function middleware(request: NextRequest) {

@@ -8,9 +8,9 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { ForgotPasswordFormData } from "@/lib/types/AuthTypes";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/client";
 import { toast, Toaster } from "sonner";
 import { resetPassword } from "../../../supabase/functions/auth/actions.ts";
+import Image from "next/image";
 
 export function ForgotPasswordForm({
   className,
@@ -35,22 +35,30 @@ export function ForgotPasswordForm({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Toaster position={`top-center`} richColors />
-      <Card className="overflow-hidden p-0">
+      <Toaster position="top-center" richColors />
+      <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
+              {/* Header */}
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Forgot Password</h1>
-                <p className="text-muted-foreground text-balance">
+                <h1 className="text-2xl font-bold text-white">
+                  Forgot Password
+                </h1>
+                <p className="text-gray-400">
                   Enter your email and we’ll send you a reset link
                 </p>
               </div>
+
+              {/* Email */}
               <div className="grid gap-3">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-300">
+                  Email
+                </Label>
                 <Input
                   type="email"
                   placeholder="m@example.com"
+                  className="bg-[#1B2028] border-[#2C82A8]/30 text-white placeholder:text-gray-500 focus:border-[#2C82A8] focus:ring-[#2C82A8]"
                   {...register("email", {
                     required: "Email is required",
                     pattern: {
@@ -60,27 +68,38 @@ export function ForgotPasswordForm({
                   })}
                 />
                 {errors.email && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-red-400">
                     {String(errors.email.message)}
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full">
+
+              {/* Submit */}
+              <Button
+                type="submit"
+                className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white"
+              >
                 Send Reset Link
               </Button>
-              <div className="text-center text-sm">
+
+              {/* Back to login */}
+              <div className="text-center text-sm text-gray-400">
                 Remembered your password?{" "}
-                <Link href="/login" className="underline underline-offset-4">
+                <Link href="/login" className="text-[#2C82A8] hover:underline">
                   Login
                 </Link>
               </div>
             </div>
           </form>
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+
+          {/* Right-side image */}
+          <div className="border-l relative hidden md:block">
+            <Image
+              src={`/logo.svg`}
+              alt={`logo`}
+              width={50}
+              height={50}
+              className={`absolute inset-0 h-full w-full p-10 opacity-30`}
             />
           </div>
         </CardContent>

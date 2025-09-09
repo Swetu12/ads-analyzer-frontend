@@ -177,3 +177,134 @@ export const campaignData: Campaign[] = [
     ],
   },
 ];
+
+export const overallDashboard = {
+  total_campaigns: 1,
+  total_impressions: 310000,
+  total_clicks: 21357,
+  total_spend: 20500,
+  total_revenue: 51850,
+  average_score: 87,
+  average_ctr: 0.0657,
+  average_conversion_rate: 0.144,
+  average_cpc: 0.96,
+  average_roas: 2.53,
+  top_performing_ads: [
+    {
+      id: "a1",
+      campaign: "Bitcoin DeFi Yield",
+      title: "Earn 12% APY on Bitcoin",
+      ctr: 0.089,
+      conversion_rate: 0.178,
+      roas: 2.91,
+    },
+  ],
+  lowest_performing_ads: [
+    {
+      id: "a3",
+      campaign: "Bitcoin DeFi Yield",
+      title: "Crypto Staking Guide",
+      ctr: 0.032,
+      conversion_rate: 0.089,
+      roas: 1.41,
+    },
+  ],
+  aggregated_recommendations: [
+    "Increase budget allocation to high-yield messaging",
+    "A/B test different APY percentages in headlines",
+    "Focus on mobile-optimized creatives",
+    "Add social proof elements to landing pages",
+    "Implement urgency messaging during market volatility",
+  ],
+  trends: {
+    ctr_change_percent: 30.8,
+    conversion_change_percent: 27.3,
+    roas_change_percent: 24.4,
+  },
+  audience_feedback_summary: {
+    positive_count: 2,
+    negative_count: 1,
+    average_rating: 3.8,
+    top_demographics: ["25-34 Tech Professionals", "35-44 Investors"],
+    common_feedback: [
+      "Sign-up process took too long",
+      "Users respond well to specific APY percentages",
+    ],
+  },
+  causes_and_impact_summary: {
+    causes: [
+      "High market volatility increased interest in stable yields",
+      "Competitor price increases drove users to seek alternatives",
+      "Influencer endorsements boosted brand awareness",
+    ],
+    impact: [
+      "23% increase in qualified leads",
+      "15% improvement in customer lifetime value",
+      "8% reduction in customer acquisition cost",
+    ],
+  },
+  performance_breakdown_summary: [
+    {
+      metric: "Click-Through Rate",
+      average: 6.8,
+      trend: "up",
+    },
+    {
+      metric: "Conversion Rate",
+      average: 15.4,
+      trend: "up",
+    },
+    {
+      metric: "Cost Per Click",
+      average: 0.76,
+      trend: "up",
+    },
+    {
+      metric: "Return on Ad Spend",
+      average: 2.91,
+      trend: "up",
+    },
+  ],
+};
+
+// Mock data for charts
+export const revenueOverTimeData = [
+  { month: "Jan", revenue: 4200, spend: 2100 },
+  { month: "Feb", revenue: 3800, spend: 1900 },
+  { month: "Mar", revenue: 5200, spend: 2600 },
+  { month: "Apr", revenue: 4800, spend: 2400 },
+  { month: "May", revenue: 6100, spend: 3050 },
+  { month: "Jun", revenue: 5850, spend: 2925 },
+  { month: "Jul", revenue: 7200, spend: 3600 },
+  { month: "Aug", revenue: 6800, spend: 3400 },
+  { month: "Sep", revenue: 8100, spend: 4050 },
+  { month: "Oct", revenue: 7600, spend: 3800 },
+  { month: "Nov", revenue: 9200, spend: 4600 },
+  { month: "Dec", revenue: 8900, spend: 4450 },
+];
+
+export const monthlyPerformanceData = [
+  { month: "Jan", impressions: 25000, clicks: 1750, conversions: 245 },
+  { month: "Feb", impressions: 28000, clicks: 1960, conversions: 274 },
+  { month: "Mar", impressions: 32000, clicks: 2240, conversions: 313 },
+  { month: "Apr", impressions: 29000, clicks: 2030, conversions: 284 },
+  { month: "May", impressions: 35000, clicks: 2450, conversions: 343 },
+  { month: "Jun", impressions: 31000, clicks: 2170, conversions: 304 },
+];
+
+export const campaignDistributionData = [
+  { name: "Bitcoin DeFi", value: 45, color: "#3B82F6" },
+  { name: "Crypto Staking", value: 25, color: "#10B981" },
+  { name: "Trading Signals", value: 20, color: "#8B5CF6" },
+  { name: "NFT Marketplace", value: 10, color: "#FACC15" },
+];
+
+export const weeklyActivityData = [
+  { day: "Mon", activity: 85 },
+  { day: "Tue", activity: 92 },
+  { day: "Wed", activity: 78 },
+  { day: "Thu", activity: 95 },
+  { day: "Fri", activity: 88 },
+  { day: "Sat", activity: 72 },
+  { day: "Sun", activity: 65 },
+];

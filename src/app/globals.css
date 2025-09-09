@@ -122,5 +122,17 @@
 }
 
 .sidebar-background {
-  @apply bg-[#1E232F]
+  @apply bg-[#1B2028]
+}
+
+.sidebar-button-color-active {
+  @apply bg-[#3893BB] text-white
+}
+
+.sidebar-button-color {
+  @apply hover:bg-[#2C82A8]
+}
+
+.analysis-card-background-color {
+  @apply bg-[#1B2028]/50
 }

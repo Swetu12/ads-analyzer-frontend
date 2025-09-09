@@ -1,5 +1,5 @@
 import React from "react";
-import { FileText, Calendar } from "lucide-react";
+import { FileText } from "lucide-react";
 import { Campaign } from "../data/mockData";
 import { Card } from "@/components/ui/card";
 
@@ -21,29 +21,32 @@ export function SummarySection({ campaign }: SummarySectionProps) {
   const roas = totalRevenue / totalSpend;
 
   return (
-    <Card className="bg-[#1a1b1e] border-gray-800">
+    <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
       <div className="p-6">
+        {/* Header */}
         <div className="flex items-center space-x-2 mb-4">
-          <FileText className="w-5 h-5 text-green-400" />
+          <FileText className="w-5 h-5 text-[#3893BB]" />
           <h3 className="text-lg font-semibold text-white">Campaign Summary</h3>
         </div>
 
+        {/* Summary Text */}
         <p className="text-gray-300 mb-6 leading-relaxed">{campaign.summary}</p>
 
+        {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-gray-800/50 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-green-400">
+          <div className="bg-[#1B2028] rounded-lg p-4 text-center border border-[#2C82A8]/30">
+            <p className="text-2xl font-bold text-[#2C82A8]">
               ${totalSpend.toLocaleString()}
             </p>
             <p className="text-sm text-gray-400">Total Spend</p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg p-4 text-center">
-            <p className="text-2xl font-bold text-blue-400">
+          <div className="bg-[#1B2028] rounded-lg p-4 text-center border border-[#2C82A8]/30">
+            <p className="text-2xl font-bold text-[#3893BB]">
               ${totalRevenue.toLocaleString()}
             </p>
             <p className="text-sm text-gray-400">Total Revenue</p>
           </div>
-          <div className="bg-gray-800/50 rounded-lg p-4 text-center">
+          <div className="bg-[#1B2028] rounded-lg p-4 text-center border border-[#2C82A8]/30">
             <p className="text-2xl font-bold text-purple-400">
               {roas.toFixed(2)}x
             </p>

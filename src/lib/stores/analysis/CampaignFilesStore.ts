@@ -5,8 +5,12 @@ export const useCampaignFilesStore = create<CampaignFilesStore>((set) => ({
   isOpen: false,
   selectedFile: null,
   uploading: false,
+  campaignFiles: [],
+  loadingFiles: false,
 
   setIsOpen: (isOpen) => set({ isOpen }),
   setSelectedFile: (selectedFile) => set({ selectedFile }),
   setUploading: (uploading) => set({ uploading }),
+  setCampaignFiles: (campaignFiles) => set({ campaignFiles }),
+  setLoadingFiles: (loading) => set({ loading }),
 }));

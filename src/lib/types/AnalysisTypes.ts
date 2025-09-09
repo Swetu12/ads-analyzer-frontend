@@ -36,4 +36,8 @@ export interface CampaignFilesStore {
   setSelectedFile: (file: File | null) => void;
   uploading: boolean;
   setUploading: (uploading: boolean) => void;
+  campaignFiles: File[] | null;
+  setCampaignFiles: (files: File[] | null) => void;
+  loadingFiles: boolean;
+  setLoadingFiles: (loading: boolean) => void;
 }

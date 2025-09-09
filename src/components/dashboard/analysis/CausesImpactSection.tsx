@@ -9,7 +9,7 @@ interface CausesImpactSectionProps {
 
 export function CausesImpactSection({ campaign }: CausesImpactSectionProps) {
   return (
-    <Card className="bg-[#1a1b1e] border-gray-800">
+    <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg">
       <div className="p-6">
         <div className="flex items-center space-x-2 mb-6">
           <AlertCircle className="w-5 h-5 text-orange-400" />
@@ -40,7 +40,7 @@ export function CausesImpactSection({ campaign }: CausesImpactSectionProps) {
             <div className="space-y-2">
               {campaign.causes_and_impact.impact.map((impact, index) => (
                 <div key={index} className="flex items-start space-x-3">
-                  <TrendingUp className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" />
+                  <TrendingUp className="w-4 h-4 text-[#2C82A8] mt-0.5 flex-shrink-0" />
                   <p className="text-gray-300 text-sm">{impact}</p>
                 </div>
               ))}
