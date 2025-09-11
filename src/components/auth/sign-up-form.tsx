@@ -137,7 +137,7 @@ export function SignUpForm({
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white"
+                className="w-full cursor-pointer bg-[#2C82A8] hover:bg-[#3893BB] text-white"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Check Email..." : "Sign Up"}
@@ -156,7 +156,7 @@ export function SignUpForm({
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full border-[#2C82A8]/40 bg-[#1B2028] text-white hover:bg-[#2C82A8]/20"
+                  className="w-full cursor-pointer border-[#2C82A8]/40 bg-[#1B2028] text-white hover:bg-[#2C82A8]/20"
                   onClick={githubSignIn}
                 >
                   <GithubIcon />
@@ -165,7 +165,7 @@ export function SignUpForm({
                 <Button
                   variant="outline"
                   type="button"
-                  className="w-full border-[#2C82A8]/40 bg-[#1B2028] text-white hover:bg-[#2C82A8]/20"
+                  className="w-full cursor-pointer border-[#2C82A8]/40 bg-[#1B2028] text-white hover:bg-[#2C82A8]/20"
                   onClick={googleSignIn}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
