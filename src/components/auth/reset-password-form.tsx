@@ -6,8 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { toast, Toaster } from "sonner";
 import { updatePassword } from "../../../supabase/functions/auth/actions.ts";
@@ -47,23 +45,35 @@ export function ResetPasswordForm({
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Toaster position={`top-center`} richColors />
-      <Card className="overflow-hidden p-0">
+    <div
+      className={cn(
+        "bg-[#1B2028]/50 flex flex-col gap-6 h-screen items-center justify-center max-w-12xl",
+        className,
+      )}
+      {...props}
+    >
+      <Toaster position="top-center" richColors />
+      <Card className="bg-[#1B2028]/50 border border-[#2C82A8]/40 rounded-2xl shadow-lg overflow-hidden">
         <CardContent className="grid p-0 md:grid-cols-2">
           <form className="p-6 md:p-8" onSubmit={handleSubmit(onSubmit)}>
             <div className="flex flex-col gap-6">
+              {/* Header */}
               <div className="flex flex-col items-center text-center">
-                <h1 className="text-2xl font-bold">Reset Password</h1>
-                <p className="text-muted-foreground text-balance">
-                  Enter your new password below
-                </p>
+                <h1 className="text-2xl font-bold text-white">
+                  Reset Password
+                </h1>
+                <p className="text-gray-400">Enter your new password below</p>
               </div>
+
+              {/* Password */}
               <div className="grid gap-3">
-                <Label htmlFor="password">New Password</Label>
+                <Label htmlFor="password" className="text-gray-300">
+                  New Password
+                </Label>
                 <Input
                   type="password"
                   placeholder="********"
+                  className="bg-[#1B2028] border-[#2C82A8]/30 text-white placeholder:text-gray-500 focus:border-[#2C82A8] focus:ring-[#2C82A8]"
                   {...register("password", {
                     required: "Password is required",
                     minLength: {
@@ -73,16 +83,21 @@ export function ResetPasswordForm({
                   })}
                 />
                 {errors.password && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-red-400">
                     {String(errors.password.message)}
                   </p>
                 )}
               </div>
+
+              {/* Confirm Password */}
               <div className="grid gap-3">
-                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <Label htmlFor="confirmPassword" className="text-gray-300">
+                  Confirm Password
+                </Label>
                 <Input
                   type="password"
                   placeholder="********"
+                  className="bg-[#1B2028] border-[#2C82A8]/30 text-white placeholder:text-gray-500 focus:border-[#2C82A8] focus:ring-[#2C82A8]"
                   {...register("confirmPassword", {
                     required: "Please confirm your password",
                     validate: (value) =>
@@ -90,21 +105,28 @@ export function ResetPasswordForm({
                   })}
                 />
                 {errors.confirmPassword && (
-                  <p className="text-sm text-red-500">
+                  <p className="text-sm text-red-400">
                     {String(errors.confirmPassword.message)}
                   </p>
                 )}
               </div>
-              <Button type="submit" className="w-full">
+
+              {/* Submit */}
+              <Button
+                type="submit"
+                className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white cursor-pointer"
+              >
                 Update Password
               </Button>
             </div>
           </form>
-          <div className="bg-muted relative hidden md:block">
+
+          {/* Right-side image */}
+          <div className="border-l relative hidden md:block">
             <img
               src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              alt="image"
+              className="absolute inset-0 h-full w-full p-10 opacity-30"
             />
           </div>
         </CardContent>

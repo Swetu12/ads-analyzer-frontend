@@ -9,11 +9,32 @@ import {
 import { AlertTriangle, Trash2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import { useUserStore } from "@/lib/stores/global/UserStore.ts";
+import { deleteUserAccount } from "../../../supabase/functions/auth/actions.ts";
+import { toast, Toaster } from "sonner";
 
 const DangerZoneSettings = () => {
+  const { user } = useUserStore();
+
+  const onSubmit = async () => {
+    try {
+      const response = await deleteUserAccount(user?.id);
+
+      if (!response.success) {
+        console.error("Error deleting account:", response.error);
+        return;
+      }
+
+      toast.success(response.message || "Account deleted successfully.");
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      toast.error("Something went wrong. Please try again.");
+    }
+  };
   return (
     <>
       <Card className="bg-[#16212B] border-[#DC2626]/20 rounded-xl shadow-lg">
+        <Toaster position={`top-center`} richColors />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[#DC2626]">
             <Trash2 className="h-5 w-5" />
@@ -39,10 +60,10 @@ const DangerZoneSettings = () => {
             <Separator className="border-[#DC2626]/20" />
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Button className="flex-1 bg-transparent border border-[#3B82F6] text-[#3B82F6] hover:bg-[#2563EB]/30 rounded-lg">
-                Download My Data
-              </Button>
-              <Button className="flex-1 bg-[#DC2626] hover:bg-[#B91C1C] text-[#FFFFFF] rounded-lg">
+              <Button
+                className="flex cursor-pointer bg-[#DC2626] hover:bg-[#B91C1C] text-[#FFFFFF] rounded-lg"
+                onClick={onSubmit}
+              >
                 Delete Account Permanently
               </Button>
             </div>

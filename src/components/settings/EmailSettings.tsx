@@ -16,6 +16,7 @@ import { useUserStore } from "@/lib/stores/global/UserStore.ts";
 import { useForm } from "react-hook-form";
 import { updateUserEmail } from "../../../supabase/functions/auth/actions.ts";
 import { UpdateEmailTypes } from "@/lib/types/AuthTypes.ts";
+import { toast, Toaster } from "sonner";
 
 const EmailSettings = () => {
   const user = useUserStore();
@@ -30,13 +31,14 @@ const EmailSettings = () => {
     try {
       const res = await updateUserEmail(data.newEmail);
       if (!res.success) {
-        alert(res.error || "Failed to update email.");
+        toast.error(res.error || "Failed to update email.");
         return;
       }
 
-      alert(
-        "Email update initiated. Please check your new email for verification.",
+      toast.success(
+        "Email update initiated. Please check BOTH YOUR EMAILS for verification.",
       );
+      reset();
     } catch (error) {
       console.error("Error updating email:", error);
     }
@@ -45,6 +47,7 @@ const EmailSettings = () => {
   return (
     <>
       <Card className="bg-[#16212B] border-[#2C3E50] rounded-xl shadow-lg">
+        <Toaster position={`top-center`} richColors />
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[#E5E7EB]">
             <Mail className="h-5 w-5 text-[#3B82F6]" />
@@ -116,7 +119,7 @@ const EmailSettings = () => {
             </div>
             <Button
               type={`submit`}
-              className="w-full md:w-auto mt-5 bg-[#3B82F6] hover:bg-[#2563EB] text-[#FFFFFF] rounded-lg"
+              className="w-full md:w-auto mt-5 bg-[#3B82F6] cursor-pointer hover:bg-[#2563EB] text-[#FFFFFF] rounded-lg"
             >
               Update Email Address
             </Button>

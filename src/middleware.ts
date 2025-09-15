@@ -19,11 +19,11 @@ export function middleware(request: NextRequest) {
   const cookies = request.cookies.getAll();
 
   const supabaseAuthCookie = cookies.find((c) =>
-    /^sb-[a-z0-9]+-auth-token\.\d+$/.test(c.name),
+    /^sb-[^-]+-auth-token(\.\d+)?$/.test(c.name),
   );
 
   const supabaseOAuthCookie = cookies.find((c) =>
-    /^sb-[a-z0-9]+-auth-token-code-verifier$/.test(c.name),
+    /^sb-[^-]+-auth-token-code-verifier$/.test(c.name),
   );
 
   const hasSession = !!supabaseAuthCookie?.value;

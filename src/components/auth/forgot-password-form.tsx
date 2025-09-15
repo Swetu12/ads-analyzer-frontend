@@ -77,7 +77,7 @@ export function ForgotPasswordForm({
               {/* Submit */}
               <Button
                 type="submit"
-                className="w-full bg-[#2C82A8] hover:bg-[#3893BB] text-white"
+                className="w-full bg-[#2C82A8] cursor-pointer hover:bg-[#3893BB] text-white"
               >
                 Send Reset Link
               </Button>

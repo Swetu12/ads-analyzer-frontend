@@ -45,7 +45,7 @@ export function SignUpForm({
 
     toast.success("Account created successfully!");
     setIsSubmitting(false);
-    router.push("/login");
+    // router.push("/login");
   };
 
   return (

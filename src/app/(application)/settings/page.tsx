@@ -13,13 +13,8 @@ export default function SettingsPage() {
         <Header />
 
         <div className="space-y-6">
-          {/* Email Settings */}
           <EmailSettings />
-
-          {/* Password Settings */}
           <PasswordSettings />
-          {/* Danger Zone */}
-          <DangerZoneSettings />
         </div>
       </div>
     </div>

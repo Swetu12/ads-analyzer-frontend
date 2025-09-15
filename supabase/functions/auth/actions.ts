@@ -4,35 +4,27 @@ import {
   SignInRequest,
   SignUpRequest,
 } from "@/lib/types/AuthTypes";
+import { options } from "preact";
 
 export async function signUpNewUser(signUpData: SignUpRequest) {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/auth-signup`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}`,
-        },
-        body: JSON.stringify({
-          email: signUpData.email,
-          password: signUpData.password,
-        }),
+    const { data, error } = await supabase.auth.signUp({
+      email: signUpData.email,
+      password: signUpData.password,
+      options: {
+        emailRedirectTo: "http://localhost:3000/confirm-email",
       },
-    );
+    });
 
-    const result = await response.json();
-
-    if (!response.ok) {
-      return { success: false, error: result.error || "Something went wrong" };
+    if (error) {
+      return { success: false, error: error.message || "Something went wrong" };
     }
 
     return { success: true, user: result.user };
   } catch (error) {
     return {
       success: false,
-      error: "Unexpected error occurred. Please try again",
+      error: JSON.stringify(error),
     };
   }
 }
@@ -67,9 +59,9 @@ export async function signOutUser() {
 
     if (error) {
       return { success: false, error: error.message };
-    } else {
-      return console.log("Sign Out successfully!");
     }
+
+    return { success: true, message: "Signed out successfully" };
   } catch (error) {
     return {
       success: false,
@@ -168,7 +160,12 @@ export async function githubSignIn() {
 
 export async function updateUserEmail(email: string) {
   try {
-    const { data, error } = await supabase.auth.updateUser({ email });
+    const { data, error } = await supabase.auth.updateUser(
+      { email },
+      {
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/confirm-email`,
+      },
+    );
 
     if (error) {
       return {
@@ -179,6 +176,54 @@ export async function updateUserEmail(email: string) {
 
     console.log("Email update request sent. Awaiting verification.");
     return { success: true, message: "Verification email sent." };
+  } catch (error) {
+    return {
+      success: false,
+      error: "Unexpected error occurred. Please try again.",
+    };
+  }
+}
+
+export async function updateUserPassword(email: string) {
+  try {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${process.env.NEXT_PUBLIC_DOMAIN_URL}/reset-password`,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message || "Something went wrong. Please try again. ",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Please check your email for password reset instructions. ",
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: "Unexpected error occurred. Please try again.",
+    };
+  }
+}
+
+export async function deleteUserAccount(userId: string) {
+  try {
+    const { data, error } = await supabase.auth.admin.deleteUser(userId);
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message || "Something went wrong. Please try again. ",
+      };
+    }
+
+    return {
+      success: true,
+      message: "Account deleted successfully.",
+    };
   } catch (error) {
     return {
       success: false,

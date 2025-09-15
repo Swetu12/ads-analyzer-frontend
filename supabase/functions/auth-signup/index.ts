@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { options } from "preact";
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {
@@ -46,7 +47,6 @@ Deno.serve(async (req: Request) => {
       await supabaseAdmin.auth.admin.createUser({
         email,
         password,
-        email_confirm: true,
       });
 
     if (createError) {

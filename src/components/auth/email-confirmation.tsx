@@ -39,18 +39,18 @@ export function EmailConfirmationPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#1B2028] flex items-center justify-center p-4 text-[#E5E7EB]">
       <div className="w-full max-w-md space-y-8">
         {loading ? (
           // Loading / waiting state
           <div className="text-center space-y-4">
             <div className="animate-spin flex justify-center">
-              <CheckCircle className="h-16 w-16 text-primary" />
+              <CheckCircle className="h-16 w-16 text-[#3B82F6]" />
             </div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold text-[#FFFFFF]">
               Waiting for email confirmation...
             </h1>
-            <p className="text-foreground text-sm">
+            <p className="text-[#9CA3AF] text-sm">
               Please check your inbox and click the verification link. This page
               will update automatically.
             </p>
@@ -61,24 +61,24 @@ export function EmailConfirmationPage() {
             {/* Header */}
             <div className="text-center space-y-4">
               <div className="flex justify-center">
-                <CheckCircle className="h-16 w-16 text-primary" />
+                <CheckCircle className="h-16 w-16 text-[#3B82F6]" />
               </div>
-              <h1 className="text-2xl font-bold text-foreground">
+              <h1 className="text-2xl font-bold text-[#FFFFFF]">
                 Email Confirmation Successful!
               </h1>
             </div>
 
             {/* Main Content Card */}
-            <Card className="border-border shadow-sm">
+            <Card className="bg-[#16212B] border-[#2C3E50] rounded-xl shadow-lg">
               <CardContent className="p-8 text-center space-y-6">
-                <p className="text-foreground leading-relaxed">
+                <p className="text-[#E5E7EB] leading-relaxed">
                   Thank you for confirming your email address. Your account is
                   now verified and you can access all features.
                 </p>
 
                 <Link href="/dashboard">
                   <Button
-                    className="w-full hover:cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+                    className="w-full bg-[#3B82F6] cursor-pointer hover:bg-[#2563EB] text-[#FFFFFF] rounded-lg transition-colors"
                     size="lg"
                   >
                     Go to Dashboard
@@ -88,12 +88,11 @@ export function EmailConfirmationPage() {
             </Card>
           </>
         ) : (
-          // Email not confirmed state
           <div className="text-center space-y-4">
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-bold text-[#FFFFFF]">
               Email not confirmed yet
             </h1>
-            <p className="text-foreground text-sm">
+            <p className="text-[#9CA3AF] text-sm">
               Please check your inbox and click the verification link to
               continue.
             </p>
@@ -102,19 +101,19 @@ export function EmailConfirmationPage() {
 
         {/* Footer (always visible) */}
         <footer className="text-center space-y-2">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[#9CA3AF]">
             Need help? Contact our support team
           </p>
           <div className="flex justify-center gap-4 text-sm">
             <Link
               href="#"
-              className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+              className="text-[#9CA3AF] hover:text-[#E5E7EB] transition-colors underline underline-offset-4"
             >
               Privacy Policy
             </Link>
             <Link
               href="#"
-              className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+              className="text-[#9CA3AF] hover:text-[#E5E7EB] transition-colors underline underline-offset-4"
             >
               Terms of Service
             </Link>
