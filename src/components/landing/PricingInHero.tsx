@@ -3,7 +3,7 @@
 
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import ReactLenis from "lenis/react";
 import PricingSection from "@/components/landing/PricingSection.tsx";
 import { motion, Variants } from "framer-motion";
@@ -11,6 +11,8 @@ import { pricingData, pricingDataAnually } from "@/lib/constants/pricing";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useUserStore } from "@/lib/stores/global/UserStore.ts";
+import { toast, Toaster } from "sonner";
 
 const heroVariant: Variants = {
   start: {},
@@ -40,15 +42,45 @@ const heroChildVariant: Variants = {
 
 const Page = () => {
   const isYearly = true;
+  const [loading, setLoading] = useState<boolean>(false);
+  const { user } = useUserStore();
+
+  const handleCheckOut = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(`/api/checkout_sessions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user_id: user?.id }),
+      });
+
+      const data = await response.json();
+
+      if (!user) {
+        toast.error("User not authenticated");
+        setLoading(false);
+        return;
+      } else if (data.url) {
+        window.location.href = data.url;
+      } else {
+        toast.error("No URL returned from the server");
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error during checkout:", error);
+      setLoading(false);
+    }
+  };
+
   return (
     <ReactLenis root={true}>
       <div className="relative isolate overflow-hidden">
+        <Toaster position={`top-center`} richColors />
         <main variants={heroVariant} initial="start" animate="end">
           <Tabs defaultValue="monthly">
-            <TabsList className="flex justify-center bg-transparent">
-              <TabsTrigger value="monthly">Monthly</TabsTrigger>
-            </TabsList>
-
             {/* Monthly Tabs Content */}
             <TabsContent value="monthly">
               <motion.div
@@ -66,6 +98,8 @@ const Page = () => {
                     <PricingSection
                       {...plan}
                       isYearly={false}
+                      onClick={handleCheckOut}
+                      isLoading={loading}
                       bgButton={index === 1 ? "bg-[#1a1a1a]" : "bg-transparent"}
                       customButtonColor={index === 1 ? "outline" : "outline"}
                       customBgColor={index === 1 ? "bg-primary/90" : ""} // Set background color for second card (index === 1)

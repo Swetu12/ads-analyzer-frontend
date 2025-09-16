@@ -54,10 +54,6 @@ const Page = () => {
           <Pricing />
 
           <Tabs defaultValue="monthly">
-            <TabsList className="flex justify-center bg-transparent">
-              <TabsTrigger value="monthly">Monthly</TabsTrigger>
-            </TabsList>
-
             {/* Monthly Tabs Content */}
             <TabsContent value="monthly">
               <motion.div

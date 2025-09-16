@@ -6,8 +6,9 @@ const authRoutes = [
   "/sign-up",
   "/forgot-password",
   "/reset-password",
-  "/logo.svg",
 ];
+
+const defaultRoutes = ["/", "/pricing"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -15,6 +16,8 @@ export function middleware(request: NextRequest) {
   const isAuthRoute = authRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`),
   );
+
+  const isDefaultRoute = defaultRoutes.includes(pathname);
 
   const cookies = request.cookies.getAll();
 
@@ -29,17 +32,27 @@ export function middleware(request: NextRequest) {
   const hasSession = !!supabaseAuthCookie?.value;
   const isInOAuthFlow = !!supabaseOAuthCookie?.value;
 
+  // Redirect logged-in users away from auth routes
   if (hasSession && isAuthRoute) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
+  // Exclude Next.js internals, API routes, and favicon
   const isExcluded =
     pathname.startsWith("/api") ||
     pathname.startsWith("/_next") ||
     pathname.startsWith("/static") ||
-    pathname === "/favicon.ico";
+    pathname === "/favicon.ico" ||
+    pathname.includes("."); // Any file in /public (e.g., images, svg, etc.)
 
-  if (!isExcluded && !isAuthRoute && !hasSession && !isInOAuthFlow) {
+  // Redirect unauthenticated users trying to access protected routes
+  if (
+    !isExcluded &&
+    !isAuthRoute &&
+    !isDefaultRoute &&
+    !hasSession &&
+    !isInOAuthFlow
+  ) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

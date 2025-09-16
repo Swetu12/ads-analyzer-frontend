@@ -113,7 +113,7 @@ const Hero: React.FC = () => {
             variants={heroChildVariant}
             className={"flex justify-center gap-2 mt-6 md:mt-10"}
           >
-            <Button>Start Free Tier</Button>
+            <Button>BUY NOW</Button>
 
             <Dialog>
               <DialogTrigger asChild>
