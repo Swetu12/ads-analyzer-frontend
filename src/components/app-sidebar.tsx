@@ -23,7 +23,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader className={`sidebar-background`}>
         <div className="p-3 flex items-center justify-start space-x-3 border-b">
           <Image src={`/logo.svg`} alt={`logo`} width={30} height={30} />
-          <span className="font-bold text-2xl">AnalytiX</span>
+          <span className="font-bold text-2xl">AdLytix</span>
         </div>
 
         <div className={`${pathname === "/settings" ? "hidden" : "block"}`}>
