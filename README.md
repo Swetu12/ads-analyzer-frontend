@@ -128,7 +128,6 @@ Each part of the codebase has a clear responsibility—for example, separate fil
 - **React**
 - **TypeScript**
 - **Tailwind CSS 4.0**
-- **Vercel**
 - **Supabase**
 
 ---
